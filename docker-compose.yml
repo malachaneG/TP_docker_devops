@@ -3,17 +3,19 @@ services:
     build: "Backend API" # Directory containing the Dockerfile for your backend
     networks:
       - my-network
-    ports:
-      - "8080:8080"
     depends_on:
       - database
 
   database:
     build: "database"
+    env_file: ".env"
     environment:
-      POSTGRES_DB: db
-      POSTGRES_USER: usr
-      POSTGRES_PASSWORD: pwd
+      - DATABASE_URL=${DATABASE_URL} 
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - database:/var/lib/postgresql/data
     networks:
       - my-network
 
