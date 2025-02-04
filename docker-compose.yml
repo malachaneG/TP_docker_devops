@@ -1,0 +1,30 @@
+services:
+  backend:
+    build: "Backend API" # Directory containing the Dockerfile for your backend
+    networks:
+      - my-network
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+
+  database:
+    build: "database"
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: usr
+      POSTGRES_PASSWORD: pwd
+    networks:
+      - my-network
+
+  httpd:
+    build: "Server HTTP"
+    ports:
+      - "80:80"  # Expose port 80 of the container to port 80 of the host machine
+    networks:
+      - my-network
+    depends_on:
+      - backend
+
+networks:
+  my-network:
